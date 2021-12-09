@@ -1,4 +1,5 @@
-const sourceTypeTrans = { link: "Link", img: "Image", script: "Script" }
+const sourceTypeLocalTrans = { link: "Link", img: "Image", script: "Script", iframe: 'Inline Frame' }
+const sourceTypeDirectiveTrans = { link: "connect", img: "img", script: "script", iframe: 'frame' }
 
 let tabOrigin = ''
 
@@ -7,8 +8,11 @@ function toResourceList(resourceList) {
 
     Object.keys(resourceList).forEach(type => {
         const typeItem = document.createElement('li')
-        typeItem.innerHTML = `<h2>${sourceTypeTrans[type]} Sources</h2>`
+        const resourceCount = Object.keys(resourceList[type]).length
+        typeItem.innerHTML = `<h2>${sourceTypeLocalTrans[type]} Sources (${resourceCount})</h2>`
         resourceListEl.appendChild(typeItem)
+
+        if (!resourceCount) return
 
         Object.keys(resourceList[type]).forEach(origin => {
             const originItem = document.createElement('li')
@@ -20,14 +24,16 @@ function toResourceList(resourceList) {
 
 function toCspHeaderString(resourceList) {
     const cspHeaderInputEl = document.getElementById('cspHeaderInput')
-    let headerString = 'Content-Security-Policy: '
+    let headerString = "Content-Security-Policy: default-src 'self'; "
 
     Object.keys(resourceList).forEach(type => {
-        headerString += `${type}-src `
+        if (!Object.keys(resourceList[type]).length) return
+
+        headerString += `${sourceTypeDirectiveTrans[type]}-src `
 
         Object.keys(resourceList[type]).forEach((origin, key, arr) => {
             headerString += (origin === tabOrigin) ? "'self'" : origin
-            headerString += (Object.is(arr.length - 1, key)) ? ';' : ' '
+            headerString += (Object.is(arr.length - 1, key)) ? '; ' : ' '
         })
     })
 
@@ -36,7 +42,7 @@ function toCspHeaderString(resourceList) {
 }
 
 function getResourcesTypeDomains() {
-    let resourceList = { link: {}, img: {}, script: {} }
+    let resourceList = { link: {}, img: {}, script: {}, iframe: {} }
     window.performance.getEntries().forEach(entry => {
         if (entry.initiatorType in resourceList) {
             resourceList[entry.initiatorType][(new URL(entry.name)).origin] = true
