@@ -3,7 +3,11 @@
   "description": "Generates a CSP based on the current page's resources",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["activeTab", "scripting"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "clipboardWrite"
+  ],
   "action": {
     "default_title": "Generate CSP",
     "default_popup": "popup.html"

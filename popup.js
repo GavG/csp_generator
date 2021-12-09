@@ -51,6 +51,14 @@ function getResourcesTypeDomains() {
     return resourceList
 }
 
+[...document.getElementsByClassName('copy-previous')].forEach(el => {
+    el.addEventListener('click', event => {
+        navigator.clipboard.writeText(event.target.previousElementSibling.value)
+        event.target.innerText = 'Copied!'
+        setTimeout(() => event.target.innerText = 'Copy', 2000)
+    })
+})
+
 chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
     tabOrigin = (new URL(results[0].url)).origin
 
