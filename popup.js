@@ -74,7 +74,7 @@ function toMetaTagString(commonCspString) {
 function toNginxDirectiveString(commonCspString) {
     setTextAreaValue(
         document.getElementById('cspNginxDirectiveInput'),
-        `add_header Content-Security-Policy ${commonCspString} always;`
+        `add_header Content-Security-Policy "${commonCspString}" always;`
     )
 }
 
