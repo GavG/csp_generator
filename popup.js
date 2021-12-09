@@ -35,25 +35,49 @@ function toResourceList(resourceList) {
     })
 }
 
-// Set HTML CSP Header Text Area
-function toCspHeaderString(resourceList) {
-    const cspHeaderInputEl = document.getElementById('cspHeaderInput')
-    let headerString = "Content-Security-Policy: default-src 'self';"
+function toCommonCspString(resourceList) {
+    let commonCspString = "default-src 'self';"
 
     Object.keys(resourceList).forEach(type => {
         if (!Object.keys(resourceList[type]).length) return
 
-        headerString += ` ${sourceTypeDirectiveTrans[type]}-src `
+        commonCspString += ` ${sourceTypeDirectiveTrans[type]}-src `
 
         Object.keys(resourceList[type]).forEach((origin, key, arr) => {
-            headerString += (origin === tabOrigin) ? "'self'" : origin
-            headerString += (Object.is(arr.length - 1, key)) ? ';' : ' '
+            commonCspString += (origin === tabOrigin) ? "'self'" : origin
+            commonCspString += (Object.is(arr.length - 1, key)) ? ';' : ' '
         })
     })
 
-    cspHeaderInputEl.value = headerString
-    cspHeaderInputEl.style.height = `${cspHeaderInputEl.scrollHeight + 3}px`
+    return commonCspString
 }
+
+function setTextAreaValue(textArea, value) {
+    textArea.value = value 
+    textArea.style.height = `${textArea.scrollHeight + 3}px`
+}
+
+function toCspHeaderString(commonCspString) {
+    setTextAreaValue(
+        document.getElementById('cspHeaderInput'),
+        `Content-Security-Policy: ${commonCspString}`
+    )
+}
+
+function toMetaTagString(commonCspString) {
+    setTextAreaValue(
+        document.getElementById('cspMetaTagInput'),
+        `<meta HTTP-EQUIV='Content-Security-Policy' CONTENT="${commonCspString}">`
+    )
+}
+
+function toNginxDirectiveString(commonCspString) {
+    setTextAreaValue(
+        document.getElementById('cspNginxDirectiveInput'),
+        `add_header Content-Security-Policy ${commonCspString} always;`
+    )
+}
+
 
 // Return the context document's performance entries as a resource type keyed object
 function getResourcesTypeDomains() {
@@ -99,6 +123,10 @@ chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
         // Expects only 1 result from the current tab's context
         const resourceList = injectionResults[0].result
         toResourceList(resourceList)
-        toCspHeaderString(resourceList)
+
+        const commonCspString = toCommonCspString(resourceList)
+        toCspHeaderString(commonCspString)
+        toMetaTagString(commonCspString)
+        toNginxDirectiveString(commonCspString)
     })
 })
