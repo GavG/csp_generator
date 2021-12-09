@@ -1,6 +1,10 @@
+const sourceTypeTrans = { link: "Link", img: "Image", script: "Script" }
+
+let tabOrigin = ''
+
 function toResourceList(resourceList) {
     const resourceListEl = document.getElementById('resourceList')
-    const sourceTypeTrans = { link: "Link", img: "Image", script: "Script" }
+
     Object.keys(resourceList).forEach(type => {
         const typeItem = document.createElement('li')
         typeItem.innerHTML = `<h2>${sourceTypeTrans[type]} Sources</h2>`
@@ -8,14 +12,27 @@ function toResourceList(resourceList) {
 
         Object.keys(resourceList[type]).forEach(origin => {
             const originItem = document.createElement('li')
-            originItem.innerHTML = `<a href="${origin}">${origin}</a>`
+            originItem.innerHTML = (origin === tabOrigin) ? `${origin} ('self')` : origin
             resourceListEl.appendChild(originItem)
         })
     })
 }
 
-function toCspStrings(resourceList) {
-    
+function toCspHeaderString(resourceList) {
+    const cspHeaderInputEl = document.getElementById('cspHeaderInput')
+    let headerString = 'Content-Security-Policy: '
+
+    Object.keys(resourceList).forEach(type => {
+        headerString += `${type}-src `
+
+        Object.keys(resourceList[type]).forEach((origin, key, arr) => {
+            headerString += (origin === tabOrigin) ? "'self'" : origin
+            headerString += (Object.is(arr.length - 1, key)) ? ';' : ' '
+        })
+    })
+
+    cspHeaderInputEl.value = headerString
+    cspHeaderInputEl.style.height = `${cspHeaderInputEl.scrollHeight + 3}px`
 }
 
 function getResourcesTypeDomains() {
@@ -29,11 +46,21 @@ function getResourcesTypeDomains() {
 }
 
 chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
+    tabOrigin = (new URL(results[0].url)).origin
+
     chrome.scripting.executeScript({
         target: { tabId: results[0].id },
         function: getResourcesTypeDomains
-    }).then(results => {
-        toResourceList(results[0].result)
-        toCspStrings(results[0].result)
+    }).then(injectionResults => {
+        let fullResourceList = {}
+
+        for (const frameResult of injectionResults) {
+            fullResourceList = {
+                ...fullResourceList,
+                ...frameResult.result
+            }
+        }
+        toResourceList(fullResourceList)
+        toCspHeaderString(fullResourceList)
     })
 })

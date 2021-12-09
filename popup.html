@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html style="min-width:600px;">
+
+    <head>
+        <style>
+            html {
+                min-width: 600px;
+            }
+            label {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .csp-input {
+                width: 100%;
+            }
+        </style>
+    </head>
+
     <body>
         <h1>CSP Generator</h1>
 
         <label>
             Header:
-            <input type='text' value='' name='csp' id='csp_input' />
+            <textarea id='cspHeaderInput' class="csp-input"></textarea>
         </label>
 
         <details>
