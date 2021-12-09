@@ -4,23 +4,47 @@
     <head>
         <style>
             html {
+                font-size: 14px;
                 min-width: 600px;
             }
-            .csp-data-group {
+            h1 {
+                font-size: 1.8rem;
+            }
+            label, summary {
+                font-weight: 600;
+                font-size: 1.2rem;
+            }
+            button, textarea, li {
+                font-size: 1rem;;
+            }
+            .data-group {
                 width: 100%;
+            }
+            .data-group .controls {
                 display: flex;
                 padding: 10px 0px;
             }
-            .csp-data-group .csp-input {
+            .data-group .controls .input {
                 flex-grow: 1;
             }
-            .csp-data-group button {
+            .data-group .controls button {
                 background-color: #33E;
                 color: #FFF;
                 margin-left: 5px;
                 margin-top: auto;
                 padding: 5px;
                 width: 60px;
+                border: none;
+                box-shadow: #bbb 2px 2px 2px 1px;
+            }
+            .data-group .controls button[disabled] {
+                background-color: #333;
+            }
+            #resourceList {
+                list-style: none;
+            }
+            #resourceList li.item {
+                margin-left: 1rem;
             }
         </style>
     </head>
@@ -28,10 +52,12 @@
     <body>
         <h1>CSP Generator</h1>
 
-        <label for="cspHeaderInput">Header:</label>
-        <div class="csp-data-group">
-            <textarea id='cspHeaderInput' class="csp-input"></textarea>
-            <button type="button" class="copy-previous">Copy</button>
+        <div class="data-group">
+            <label for="cspHeaderInput">HTTP Header:</label>
+            <div class="controls">
+                <textarea id='cspHeaderInput' class="input"></textarea>
+                <button class="copy-previous"></button>
+            </div>
         </div>
 
         <br>

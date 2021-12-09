@@ -7,9 +7,9 @@ function toResourceList(resourceList) {
     const resourceListEl = document.getElementById('resourceList')
 
     Object.keys(resourceList).forEach(type => {
-        const typeItem = document.createElement('li')
         const resourceCount = Object.keys(resourceList[type]).length
-        typeItem.innerHTML = `<h2>${sourceTypeLocalTrans[type]} Sources (${resourceCount})</h2>`
+        const typeItem = document.createElement('li')
+        typeItem.innerHTML = `<h3>${sourceTypeLocalTrans[type]} Sources (${resourceCount})</h3>`
         resourceListEl.appendChild(typeItem)
 
         if (!resourceCount) return
@@ -17,6 +17,7 @@ function toResourceList(resourceList) {
         Object.keys(resourceList[type]).forEach(origin => {
             const originItem = document.createElement('li')
             originItem.innerHTML = (origin === tabOrigin) ? `${origin} ('self')` : origin
+            originItem.classList.add('item')
             resourceListEl.appendChild(originItem)
         })
     })
@@ -52,11 +53,18 @@ function getResourcesTypeDomains() {
 }
 
 [...document.getElementsByClassName('copy-previous')].forEach(el => {
+    const copyText = 'Copy'
     el.addEventListener('click', event => {
         navigator.clipboard.writeText(event.target.previousElementSibling.value)
         event.target.innerText = 'Copied!'
-        setTimeout(() => event.target.innerText = 'Copy', 2000)
+        event.target.disabled = true
+        setTimeout(() => {
+            event.target.innerText = copyText
+            event.target.disabled = false
+        }, 2000)
     })
+    el.type = 'button'
+    el.innerText = copyText
 })
 
 chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
