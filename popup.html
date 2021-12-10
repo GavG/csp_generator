@@ -2,86 +2,24 @@
 <html style="min-width:600px;">
 
     <head>
-        <style>
-            html {
-                font-size: 14px;
-                min-width: 600px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            summary {
-                font-weight: 600;
-                font-size: 1.2rem;
-            }
-            button, textarea, li {
-                font-size: 1rem;;
-            }
-            .data-group {
-                width: 100%;
-                display: none;
-            }
-            .data-group.visible {
-                display: block;
-            }
-            .data-group .controls {
-                display: flex;
-                padding: 10px 0px;
-            }
-            .data-group .controls .input {
-                flex-grow: 1;
-            }
-            .data-group .controls button {
-                background-color: #33E;
-                color: #FFF;
-                margin-left: 5px;
-                margin-top: auto;
-                padding: 5px;
-                width: 60px;
-                border: none;
-                box-shadow: #bbb 2px 2px 2px 1px;
-            }
-            .data-group .controls button[disabled] {
-                background-color: #333;
-            }
-            #resourceList {
-                list-style: none;
-            }
-            #resourceList li.item {
-                margin-left: 1rem;
-            }
-        </style>
+        <link rel="stylesheet" href="popup.css">
     </head>
 
     <body>
-        <h1>CSP Generator</h1>
+        <h1>Basic CSP Generator</h1>
 
-        <select name="groupSelector">
-            <option value="httpHeaderGroup" selected>HTTP Header</option>
-            <option value="metaTagGroup">Meta Tag</option>
-            <option value="nginxDirectiveGroup">Nginx Directive</option>
-        </select>
-
-        <div class="data-group visible" id="httpHeaderGroup">
-            <div class="controls">
-                <textarea class="input"></textarea>
-                <button class="copy-previous"></button>
-            </div>
+        <div class="controls">
+            <select name="outputSelector">
+                <option value="httpHeaderGroup" selected>HTTP Header</option>
+                <option value="metaTagGroup">Meta Tag</option>
+                <option value="nginxDirectiveGroup">Nginx Directive</option>
+            </select>
+            <button id="copyCsp"></button>
         </div>
 
-        <div class="data-group" id="metaTagGroup">
-            <div class="controls">
-                <textarea class="input"></textarea>
-                <button class="copy-previous"></button>
-            </div>
-        </div>
-
-        <div class="data-group" id="nginxDirectiveGroup">
-            <div class="controls">
-                <textarea class="input"></textarea>
-                <button class="copy-previous"></button>
-            </div>
-        </div>
+        <textarea id="httpHeaderGroup" class="visible"></textarea>
+        <textarea id="metaTagGroup"></textarea>
+        <textarea id="nginxDirectiveGroup"></textarea>
 
         <br>
 

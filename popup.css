@@ -1,0 +1,72 @@
+html {
+    background-color: #222;
+    color: #EEE;
+    font-size: 14px;
+    min-width: 600px;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+summary {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+button, textarea, li {
+    font-size: 1rem;
+}
+
+textarea {
+    width: 100%;
+    display: none;
+}
+
+textarea.visible {
+    display: block;
+    padding: 4px;
+}
+
+textarea, select {
+    color: #EEE;
+    background: #555;
+    border: solid 1px #11C;
+    padding: 5px;
+}
+
+.controls {
+    display: flex;
+    padding: 10px 0px;
+}
+
+.controls select {
+    flex-grow: 1;
+}
+
+.controls button {
+    background-color: #11C;
+    color: #FFF;
+    margin-left: 5px;
+    margin-top: auto;
+    padding: 5px;
+    width: 120px;
+    border: none;
+}
+
+.controls button[disabled] {
+    background-color: #333;
+}
+
+#resourceList {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+#resourceList li.item {
+    margin-left: 1rem;
+}

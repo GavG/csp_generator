@@ -1,8 +1,8 @@
 const sourceTypeLocalTrans = {
-    link: "Link",
-    img: "Image",
-    script: "Script",
-    iframe: 'Inline Frame'
+    link: "Links",
+    img: "Images",
+    script: "Scripts",
+    iframe: 'IFrames'
 }
 
 const sourceTypeDirectiveTrans = {
@@ -21,7 +21,7 @@ function toResourceList(resourceList) {
     Object.keys(resourceList).forEach(type => {
         const resourceCount = Object.keys(resourceList[type]).length
         const typeItem = document.createElement('li')
-        typeItem.innerHTML = `<h3>${sourceTypeLocalTrans[type]} Sources (${resourceCount})</h3>`
+        typeItem.innerHTML = `<h3>${sourceTypeLocalTrans[type]} (${resourceCount})</h3>`
         resourceListEl.appendChild(typeItem)
 
         if (!resourceCount) return
@@ -57,7 +57,7 @@ function setTextAreaSize(textArea) {
 }
 
 function getGroupTextArea(dataGroupId) {
-    return document.querySelector(`#${dataGroupId} div.controls textarea`)
+    return document.getElementById(dataGroupId)
 }
 
 function setTextAreaValue(dataGroupId, value) {
@@ -101,11 +101,12 @@ function getResourcesTypeDomains() {
 }
 
 // Attach copy textarea value listeners
-[...document.getElementsByClassName('copy-previous')].forEach(el => {
-    const copyText = 'Copy'
-    el.addEventListener('click', event => {
+function addCopyCspListener() {
+    const copyCspEl = document.getElementById('copyCsp')
+    const copyText = 'Copy Output'
+    copyCspEl.addEventListener('click', event => {
         // Clipboard API granted in manifest
-        navigator.clipboard.writeText(event.target.previousElementSibling.value)
+        navigator.clipboard.writeText(document.querySelector("textarea.visible").value)
         event.target.innerText = 'Copied!'
         event.target.disabled = true
         setTimeout(() => {
@@ -113,37 +114,49 @@ function getResourcesTypeDomains() {
             event.target.disabled = false
         }, 2000)
     })
-    el.type = 'button'
-    el.innerText = copyText
-})
+    copyCspEl.type = 'button'
+    copyCspEl.innerText = copyText
+}
 
-// Add data group select listener
-document.querySelector("select[name='groupSelector']").addEventListener('change', (event) => {
-    // Hide the currently visible data-group
-    document.querySelector(".data-group.visible").classList.remove('visible')
-    document.getElementById(event.target.value).classList.add('visible')
-    setTextAreaSize(getGroupTextArea(event.target.value))
-})
+// Add data output select listener
+function addOutputSelectListener() {
+    document.querySelector("select[name='outputSelector']").addEventListener('change', (event) => {
+        // Hide the currently visible output
+        document.querySelector("textarea.visible").classList.remove('visible')
+        getGroupTextArea(event.target.value).classList.add('visible')
+        setTextAreaSize(getGroupTextArea(event.target.value))
+    })
+}
 
 // Parse the resources of the current tab
-chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
-    // Record the tab's origin so we can evaluate 'self' in the generated CSP
-    tabOrigin = (new URL(results[0].url)).origin
+function generateCspOutputs() {
+    chrome.tabs.query({ active: true, currentWindow: true }).then(results => {
+        // Record the tab's origin so we can evaluate 'self' in the generated CSP
+        tabOrigin = (new URL(results[0].url)).origin
 
-    // Executes the resource getter function in the tab's own context
-    chrome.scripting.executeScript({
-        target: {
-            tabId: results[0].id
-        }, // No frames, they each have their own CSP
-        function: getResourcesTypeDomains
-    }).then(injectionResults => {
-        // Expects only 1 result from the current tab's context
-        const resourceList = injectionResults[0].result
-        toResourceList(resourceList)
+        // Executes the resource getter function in the tab's own context
+        chrome.scripting.executeScript({
+            target: {
+                tabId: results[0].id
+            }, // No frames, they each have their own CSP
+            function: getResourcesTypeDomains
+        }).then(injectionResults => {
+            // Expects only 1 result from the current tab's context
+            const resourceList = injectionResults[0].result
+            toResourceList(resourceList)
 
-        const commonCspString = toCommonCspString(resourceList)
-        toCspHeaderString(commonCspString)
-        toMetaTagString(commonCspString)
-        toNginxDirectiveString(commonCspString)
+            const commonCspString = toCommonCspString(resourceList)
+            toCspHeaderString(commonCspString)
+            toMetaTagString(commonCspString)
+            toNginxDirectiveString(commonCspString)
+        })
     })
-})
+}
+
+function init() {
+    addCopyCspListener()
+    addOutputSelectListener()
+    generateCspOutputs()
+}
+
+init()
