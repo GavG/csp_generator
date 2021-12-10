@@ -10,7 +10,7 @@
             h1 {
                 font-size: 1.8rem;
             }
-            label, summary {
+            summary {
                 font-weight: 600;
                 font-size: 1.2rem;
             }
@@ -19,6 +19,10 @@
             }
             .data-group {
                 width: 100%;
+                display: none;
+            }
+            .data-group.visible {
+                display: block;
             }
             .data-group .controls {
                 display: flex;
@@ -52,26 +56,29 @@
     <body>
         <h1>CSP Generator</h1>
 
-        <div class="data-group">
-            <label for="cspHeaderInput">HTTP Header:</label>
+        <select name="groupSelector">
+            <option value="httpHeaderGroup" selected>HTTP Header</option>
+            <option value="metaTagGroup">Meta Tag</option>
+            <option value="nginxDirectiveGroup">Nginx Directive</option>
+        </select>
+
+        <div class="data-group visible" id="httpHeaderGroup">
             <div class="controls">
-                <textarea id='cspHeaderInput' class="input"></textarea>
+                <textarea class="input"></textarea>
                 <button class="copy-previous"></button>
             </div>
         </div>
 
-        <div class="data-group">
-            <label for="cspHeaderInput">Meta Tag:</label>
+        <div class="data-group" id="metaTagGroup">
             <div class="controls">
-                <textarea id='cspMetaTagInput' class="input"></textarea>
+                <textarea class="input"></textarea>
                 <button class="copy-previous"></button>
             </div>
         </div>
 
-        <div class="data-group">
-            <label for="cspHeaderInput">Nginx Directive:</label>
+        <div class="data-group" id="nginxDirectiveGroup">
             <div class="controls">
-                <textarea id='cspNginxDirectiveInput' class="input"></textarea>
+                <textarea class="input"></textarea>
                 <button class="copy-previous"></button>
             </div>
         </div>

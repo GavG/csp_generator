@@ -52,28 +52,37 @@ function toCommonCspString(resourceList) {
     return commonCspString
 }
 
-function setTextAreaValue(textArea, value) {
-    textArea.value = value 
+function setTextAreaSize(textArea) {
     textArea.style.height = `${textArea.scrollHeight + 3}px`
+}
+
+function getGroupTextArea(dataGroupId) {
+    return document.querySelector(`#${dataGroupId} div.controls textarea`)
+}
+
+function setTextAreaValue(dataGroupId, value) {
+    const textArea = getGroupTextArea(dataGroupId)
+    textArea.value = value
+    setTextAreaSize(textArea)
 }
 
 function toCspHeaderString(commonCspString) {
     setTextAreaValue(
-        document.getElementById('cspHeaderInput'),
+        'httpHeaderGroup',
         `Content-Security-Policy: ${commonCspString}`
     )
 }
 
 function toMetaTagString(commonCspString) {
     setTextAreaValue(
-        document.getElementById('cspMetaTagInput'),
+        'metaTagGroup',
         `<meta HTTP-EQUIV='Content-Security-Policy' CONTENT="${commonCspString}">`
     )
 }
 
 function toNginxDirectiveString(commonCspString) {
     setTextAreaValue(
-        document.getElementById('cspNginxDirectiveInput'),
+        'nginxDirectiveGroup',
         `add_header Content-Security-Policy "${commonCspString}" always;`
     )
 }
@@ -106,6 +115,14 @@ function getResourcesTypeDomains() {
     })
     el.type = 'button'
     el.innerText = copyText
+})
+
+// Add data group select listener
+document.querySelector("select[name='groupSelector']").addEventListener('change', (event) => {
+    // Hide the currently visible data-group
+    document.querySelector(".data-group.visible").classList.remove('visible')
+    document.getElementById(event.target.value).classList.add('visible')
+    setTextAreaSize(getGroupTextArea(event.target.value))
 })
 
 // Parse the resources of the current tab
