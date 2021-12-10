@@ -76,7 +76,7 @@ function toCspHeaderString(commonCspString) {
 function toMetaTagString(commonCspString) {
     setTextAreaValue(
         'metaTagGroup',
-        `<meta HTTP-EQUIV='Content-Security-Policy' CONTENT="${commonCspString}">`
+        `<meta http-equiv='Content-Security-Policy' content="${commonCspString}">`
     )
 }
 
