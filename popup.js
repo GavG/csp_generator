@@ -103,11 +103,11 @@ function getResourcesTypeDomains() {
 // Attach copy textarea value listeners
 function addCopyCspListener() {
     const copyCspEl = document.getElementById('copyCsp')
-    const copyText = 'Copy Output'
+    const copyText = '📋'
     copyCspEl.addEventListener('click', event => {
         // Clipboard API granted in manifest
         navigator.clipboard.writeText(document.querySelector("textarea.visible").value)
-        event.target.innerText = 'Copied!'
+        event.target.innerText = '👍'
         event.target.disabled = true
         setTimeout(() => {
             event.target.innerText = copyText

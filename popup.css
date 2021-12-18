@@ -35,7 +35,7 @@ textarea.visible {
 textarea, select {
     color: #EEE;
     background: #555;
-    border: solid 1px #11C;
+    border: solid 1px #CCC;
     padding: 5px;
 }
 
@@ -46,6 +46,7 @@ textarea, select {
 
 .controls select {
     flex-grow: 1;
+    height: 2rem;
 }
 
 .controls button {
@@ -54,7 +55,8 @@ textarea, select {
     margin-left: 5px;
     margin-top: auto;
     padding: 5px;
-    width: 120px;
+    height: 2rem;
+    width: 40px;
     border: none;
 }
 
