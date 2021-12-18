@@ -2,17 +2,17 @@ const sourceTypeLocalTrans = {
     link: "Links",
     img: "Images",
     script: "Scripts",
-    iframe: 'IFrames'
+    iframe: "IFrames",
 }
 
 const sourceTypeDirectiveTrans = {
     link: "connect",
     img: "img",
     script: "script",
-    iframe: 'frame'
+    iframe: "frame",
 }
 
-let tabOrigin = ''
+let tabOrigin = ""
 
 // Set HTML Resource List
 function toResourceList(resourceList) {
