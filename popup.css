@@ -24,6 +24,7 @@ details p {
 summary {
     font-weight: 600;
     font-size: 1.2rem;
+    cursor: pointer;
 }
 
 button, textarea, li {
@@ -33,6 +34,7 @@ button, textarea, li {
 textarea {
     width: 100%;
     display: none;
+    resize: vertical;
 }
 
 textarea.visible {
@@ -47,24 +49,35 @@ textarea, select {
     padding: 5px;
 }
 
-#outputWrapper {
+#outputWrapper, header {
     width: 100%;
     display: flex;
     padding: 10px 0px;
 }
 
-select {
-    height: 2rem;
+header * {
+    margin-top: auto;
+    margin-bottom: 0px;
+}
+
+header label {
+    margin-left: auto;
+    margin-right: 45px;
+}
+
+label {
+    font-size: 1rem;
 }
 
 #outputWrapper button {
-    background-color: #11C;
+    background-color: #EE2;
     color: #FFF;
     margin-left: 5px;
     padding: 5px;
     width: 40px;
     height: auto;
     border: none;
+    cursor: pointer;
 }
 
 #outputWrapper > div {

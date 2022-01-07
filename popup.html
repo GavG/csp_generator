@@ -7,13 +7,18 @@
     </head>
 
     <body>
-        <h1>Basic CSP Generator</h1>
 
-        <select name="outputSelector">
-            <option value="httpHeaderGroup" selected>HTTP Header</option>
-            <option value="metaTagGroup">Meta Tag</option>
-            <option value="nginxDirectiveGroup">Nginx Directive</option>
-        </select>
+        <header>
+            <h1>Basic CSP Generator</h1>
+
+            <label>Format:
+                <select name="outputSelector">
+                    <option value="httpHeaderGroup" selected>HTTP Header</option>
+                    <option value="metaTagGroup">Meta Tag</option>
+                    <option value="nginxDirectiveGroup">Nginx Directive</option>
+                </select>
+            </label>
+        </header>
 
         <div id="outputWrapper">
             <div>
@@ -23,8 +28,6 @@
             </div>
             <button id="copyCsp"></button>
         </div>
-
-        <br>
 
         <details>
             <summary>Resource List</summary>
