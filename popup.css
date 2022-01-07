@@ -13,6 +13,14 @@ h1 {
     font-size: 1.8rem;
 }
 
+details {
+    margin: 20px 0px;
+}
+
+details p {
+    font-size: 1rem;
+}
+
 summary {
     font-weight: 600;
     font-size: 1.2rem;
@@ -34,39 +42,41 @@ textarea.visible {
 
 textarea, select {
     color: #EEE;
-    background: #555;
+    background: #222;
     border: solid 1px #CCC;
     padding: 5px;
 }
 
-.controls {
+#outputWrapper {
+    width: 100%;
     display: flex;
     padding: 10px 0px;
 }
 
-.controls select {
-    flex-grow: 1;
+select {
     height: 2rem;
 }
 
-.controls button {
+#outputWrapper button {
     background-color: #11C;
     color: #FFF;
     margin-left: 5px;
-    margin-top: auto;
     padding: 5px;
-    height: 2rem;
     width: 40px;
+    height: auto;
     border: none;
 }
 
-.controls button[disabled] {
+#outputWrapper > div {
+    width: 100%;
+}
+
+#outputWrapper button[disabled] {
     background-color: #333;
 }
 
 #resourceList {
     list-style: none;
-    margin-bottom: 10px;
 }
 
 #resourceList li.item {

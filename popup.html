@@ -9,24 +9,37 @@
     <body>
         <h1>Basic CSP Generator</h1>
 
-        <div class="controls">
-            <select name="outputSelector">
-                <option value="httpHeaderGroup" selected>HTTP Header</option>
-                <option value="metaTagGroup">Meta Tag</option>
-                <option value="nginxDirectiveGroup">Nginx Directive</option>
-            </select>
+        <select name="outputSelector">
+            <option value="httpHeaderGroup" selected>HTTP Header</option>
+            <option value="metaTagGroup">Meta Tag</option>
+            <option value="nginxDirectiveGroup">Nginx Directive</option>
+        </select>
+
+        <div id="outputWrapper">
+            <div>
+                <textarea id="httpHeaderGroup" class="visible"></textarea>
+                <textarea id="metaTagGroup"></textarea>
+                <textarea id="nginxDirectiveGroup"></textarea>
+            </div>
             <button id="copyCsp"></button>
         </div>
-
-        <textarea id="httpHeaderGroup" class="visible"></textarea>
-        <textarea id="metaTagGroup"></textarea>
-        <textarea id="nginxDirectiveGroup"></textarea>
 
         <br>
 
         <details>
             <summary>Resource List</summary>
             <ul id='resourceList'></ul>
+        </details>
+
+        <details>
+            <summary>About</summary>
+            <p>
+                When ran on a page, this extension will attempt to discover and group loaded resource origins into CSP directives.
+                These directives are then output in common formats.
+            </p>
+            <p>
+                Note: <b>This should be used as a starting point for your CSP only.</b> The extension cannot generate things like nonce directives or analyze not yet loaded content sources.
+            </p>
         </details>
 
         <script src="popup.js"></script>
